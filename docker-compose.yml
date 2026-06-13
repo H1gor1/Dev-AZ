@@ -7,7 +7,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - "postgresqldata:/var/lib/postgresql/data"
+      - "postgresqldata:/var/lib/postgresql"
     environment:
       POSTGRES_DB: ${DB_DATABASE:?}
       POSTGRES_USER: ${DB_USERNAME:?}
@@ -20,9 +20,8 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./backend/src:/app/src
-      - ./backend/pom.xml:/app/pom.xml
-      - maven-repo:/root/.m2
+      - ./leilao-api/src:/app/src
+      - ./leilao-api/pom.xml:/app/pom.xml
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - DB_URL=${DB_URL}

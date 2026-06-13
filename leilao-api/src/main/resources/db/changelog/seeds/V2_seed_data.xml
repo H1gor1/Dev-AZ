@@ -5,7 +5,8 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="130620261500" author="higor">
-        <sqlFile path="db/changelog/seeds/V2_seed_data.sql"
+        <sqlFile path="V2_seed_data.sql"
+                 relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"/>
     </changeSet>
