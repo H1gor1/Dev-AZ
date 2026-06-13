@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="130620261349" author="higor">
+        <createTable tableName="lote">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="numeroLote" type="integer"/>
+
+            <column name="descricao" type="varchar(60)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="quantidade" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="valorInicial" type="NUMERIC(15,2)"/>
+
+            <column name="unidade_id" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="lote_unid_fk"
+                             referencedTableName="unidade"
+                             referencedColumnNames="id"/>
+            </column>
+
+            <column name="leilao_id" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="lote_leilao_fk"
+                             referencedTableName="leilao"
+                             referencedColumnNames="id"/>
+            </column>
+
+            <column name="createdAt" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updatedAt" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

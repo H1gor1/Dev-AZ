@@ -1,0 +1,33 @@
+name: "leilao"
+
+services:
+  db:
+    image: "postgres:18-alpine"
+    restart: "unless-stopped"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "postgresqldata:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:?}
+      POSTGRES_USER: ${DB_USERNAME:?}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?}
+
+  api:
+    build:
+      context: ./leilao-api
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/pom.xml:/app/pom.xml
+      - maven-repo:/root/.m2
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DB_URL=${DB_URL}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+
+volumes:
+  postgresqldata:

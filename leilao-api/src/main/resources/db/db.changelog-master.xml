@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <include file="db/changelog/V1_create_empresa.xml"/>
+    <include file="db/changelog/V1_create_leilao.xml"/>
+    <include file="db/changelog/V1_create_comprador.xml"/>
+    <include file="db/changelog/V1_create_unidade.xml"/>
+    <include file="db/changelog/V1_create_lote.xml"/>
+</databaseChangeLog>

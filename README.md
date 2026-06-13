@@ -107,5 +107,5 @@ O link de editar deve chamar a tela de cadastro usando a seguinte url #/leilao/:
 
 ## Teste tudo muito bem e boa sorte.
 
-[database]: leilao-api/src/main/resources/sql/database.png
-[arquitetura]: leilao-api/src/main/resources/arquitetura.png
+[database]: imgs/database.png
+[arquitetura]: imgs/arquitetura.png
