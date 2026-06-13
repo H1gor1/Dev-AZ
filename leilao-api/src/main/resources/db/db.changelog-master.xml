@@ -9,4 +9,7 @@
     <include file="db/changelog/V1_create_comprador.xml"/>
     <include file="db/changelog/V1_create_unidade.xml"/>
     <include file="db/changelog/V1_create_lote.xml"/>
+
+
+    <include file="/db/changelog/seeds/V2_seed_data.xml"/>
 </databaseChangeLog>
