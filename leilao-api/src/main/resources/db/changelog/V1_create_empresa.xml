@@ -7,13 +7,13 @@
     <changeSet id="202606122354" author="higor">
         <createTable tableName="empresa">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="true"/>
+                <constraints primaryKey="true" nullable="false"/>
             </column>
-            
-            <column name="razaoSocial" type="varchar(64)">
+
+            <column name="razao_social" type="varchar(64)">
                 <constraints nullable="false"/>
             </column>
-            
+
             <column name="cnpj" type="varchar(14)">
                 <constraints unique="true" nullable="false"/>
             </column>
@@ -34,14 +34,13 @@
             </column>
 
             <column name="password" type="varchar"/>
-            <column name="createdAt" type="timestamp">
+            <column name="created_at" type="timestamp">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="updatedAt" type="timestamp">
+            <column name="updated_at" type="timestamp">
                 <constraints nullable="false"/>
             </column>
-
 
         </createTable>
     </changeSet>

@@ -13,15 +13,20 @@
             <column name="descricao" type="varchar(60)">
                 <constraints nullable="false"/>
             </column>
-            <column name="vendedor" type="bigint"/>
-            <column name="inicioPrevisto" type="timestamp">
+            <column name="vendedor" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="leilao_vendedor_fk"
+                             referencedTableName="empresa"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="inicio_previsto" type="timestamp">
                 <constraints nullable="false"/>
             </column>
-            <column name="createdAt" type="timestamp">
+            <column name="created_at" type="timestamp">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="updatedAt" type="timestamp">
+            <column name="updated_at" type="timestamp">
                 <constraints nullable="false"/>
             </column>
         </createTable>

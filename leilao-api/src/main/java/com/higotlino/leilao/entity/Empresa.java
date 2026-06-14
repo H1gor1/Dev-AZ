@@ -3,6 +3,7 @@ package com.higotlino.leilao.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +19,7 @@ public class Empresa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "razaoSocial", nullable = false, length = 64)
+    @Column(name = "razao_social", nullable = false, length = 64)
     private String razaoSocial;
 
     @Column(nullable = false, unique = true, length = 14)
@@ -58,10 +59,10 @@ public class Empresa {
     private String password;
 
     @CreationTimestamp
-    @Column(name = "createdAt", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @CreationTimestamp
-    @Column(name = "updatedAt", nullable = false)
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 }

@@ -10,7 +10,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 
-            <column name="numeroLote" type="integer"/>
+            <column name="numero_lote" type="integer"/>
 
             <column name="descricao" type="varchar(60)">
                 <constraints nullable="false"/>
@@ -20,7 +20,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="valorInicial" type="NUMERIC(15,2)"/>
+            <column name="valor_inicial" type="NUMERIC(15,2)"/>
 
             <column name="unidade_id" type="bigint">
                 <constraints nullable="false"
@@ -36,11 +36,11 @@
                              referencedColumnNames="id"/>
             </column>
 
-            <column name="createdAt" type="timestamp">
+            <column name="created_at" type="timestamp">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="updatedAt" type="timestamp">
+            <column name="updated_at" type="timestamp">
                 <constraints nullable="false"/>
             </column>
         </createTable>
