@@ -1,0 +1,19 @@
+info:
+  name: GetByLeilao
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: http://localhost:8080/comprador/leilao/:leilaoId
+  params:
+    - name: leilaoId
+      value: "1"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

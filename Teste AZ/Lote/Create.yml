@@ -1,0 +1,26 @@
+info:
+  name: Create
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: http://localhost:8080/lote
+  body:
+    type: json
+    data: |-
+      {
+        "numeroLote": 3,
+        "descricao": "Lote de teste Bruno",
+        "quantidade": 100,
+        "valorInicial": 50.00,
+        "unidadeId": 1,
+        "leilaoId": 1
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

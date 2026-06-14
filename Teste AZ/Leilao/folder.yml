@@ -1,0 +1,7 @@
+info:
+  name: Leilao
+  type: folder
+  seq: 2
+
+request:
+  auth: inherit
