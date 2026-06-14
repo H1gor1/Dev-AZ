@@ -10,4 +10,4 @@ COPY src ./src
 
 EXPOSE 8080 35729
 
-CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.fork=false"]
+CMD ["mvn", "spring-boot:run"]

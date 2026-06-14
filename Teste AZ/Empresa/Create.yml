@@ -1,0 +1,33 @@
+info:
+  name: Create
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: http://localhost:8080/empresa
+  body:
+    type: json
+    data: |-
+      {
+        "razaoSocial": "Empresa Exemplo Ltda",
+        "cnpj": "12345678000199",
+        "logradouro": "Rua Exemplo",
+        "municipio": "São Paulo",
+        "numero": "100",
+        "complemento": "Sala 1",
+        "bairro": "Centro",
+        "cep": "01001000",
+        "telefone": "11999999999",
+        "email": "contato@exemplo.com",
+        "site": "https://exemplo.com",
+        "usuario": "admin",
+        "password": "12345678"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

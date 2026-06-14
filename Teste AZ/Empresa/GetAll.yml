@@ -1,0 +1,20 @@
+info:
+  name: GetAll
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: http://localhost:8080/empresa
+  params:
+    - name: id
+      value: "1"
+      type: query
+      disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
