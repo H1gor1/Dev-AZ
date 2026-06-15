@@ -3,10 +3,10 @@ package com.higotlino.leilao.service;
 import com.higotlino.leilao.entity.Comprador;
 import com.higotlino.leilao.entity.Empresa;
 import com.higotlino.leilao.entity.Leilao;
+import com.higotlino.leilao.exception.ResourceNotFoundException;
 import com.higotlino.leilao.repository.CompradorRepository;
 import com.higotlino.leilao.repository.EmpresaRepository;
 import com.higotlino.leilao.repository.LeilaoRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +25,7 @@ public class CompradorService {
     @Transactional(readOnly = true)
     public List<Comprador> getByLeilaoId(Long leilaoId) {
         leilaoRepository.findById(leilaoId).orElseThrow(
-                () -> new EntityNotFoundException("Leilao nao encontrado")
+                () -> new ResourceNotFoundException("Leilao nao encontrado")
         );
 
         return compradorRepository.findByLeilaoId(leilaoId);
@@ -34,7 +34,7 @@ public class CompradorService {
     @Transactional(readOnly = true)
     public List<Comprador> getByEmpresaId(Long empresaId) {
         empresaRepository.findById(empresaId).orElseThrow(
-                () -> new EntityNotFoundException("Empresa nao encontrada")
+                () -> new ResourceNotFoundException("Empresa nao encontrada")
         );
         return compradorRepository.findByEmpresaId(empresaId);
     }
@@ -47,10 +47,10 @@ public class CompradorService {
     @Transactional
     public Comprador create(Long leilaoId, Long empresaId) {
         Leilao leilao = leilaoRepository.findById(leilaoId).orElseThrow(
-                () -> new EntityNotFoundException("Leilao nao encontrado")
+                () -> new ResourceNotFoundException("Leilao nao encontrado")
         );
         Empresa empresa = empresaRepository.findById(empresaId).orElseThrow(
-                () -> new EntityNotFoundException("Empresa nao encontrada")
+                () -> new ResourceNotFoundException("Empresa nao encontrada")
         );
 
         Comprador comprador = new Comprador();
@@ -61,6 +61,8 @@ public class CompradorService {
 
     @Transactional
     public void delete(Long empresaId, Long leilaoId) {
+        if (!compradorRepository.existsByEmpresaIdAndLeilaoId(empresaId, leilaoId))
+            throw new ResourceNotFoundException("Comprador nao encontrado");
         compradorRepository.deleteByEmpresaIdAndLeilaoId(empresaId, leilaoId);
     }
 

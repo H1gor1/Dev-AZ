@@ -36,29 +36,22 @@ public class LeilaoController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<LeilaoResponse>> getById(@PathVariable Long id){
         Leilao leilao = service.getById(id);
-        if(leilao == null){
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Leilao encontrado", mapper.toResponse(leilao), null));
+        return ResponseEntity.ok(ApiResponse.ok("Leilao encontrado", mapper.toResponse(leilao)));
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse<LeilaoResponse>> create(@RequestBody @Validated CreateLeilaoRequest request){
         Leilao leilao = mapper.toEntity(request);
-        Leilao saved = service.create(leilao, request.vendedorId());
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Leilao criado", mapper.toResponse(saved), null));
+        Leilao saved = service.create(leilao, request.getVendedorId());
+        return ResponseEntity.ok(ApiResponse.ok("Leilao criado", mapper.toResponse(saved)));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<LeilaoResponse>> update(@PathVariable Long id, @RequestBody @Validated LeilaoUpdateRequest request){
         Leilao leilao = service.getById(id);
-        if(leilao == null){
-            return ResponseEntity.notFound().build();
-        }
         mapper.updateEntity(request, leilao);
         Leilao saved = service.update(leilao);
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Leilao atualizado", mapper.toResponse(saved), null));
+        return ResponseEntity.ok(ApiResponse.ok("Leilao atualizado", mapper.toResponse(saved)));
     }
 
     @DeleteMapping("/{id}")

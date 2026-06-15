@@ -2,9 +2,9 @@ package com.higotlino.leilao.service;
 
 import com.higotlino.leilao.entity.Empresa;
 import com.higotlino.leilao.entity.Leilao;
+import com.higotlino.leilao.exception.ResourceNotFoundException;
 import com.higotlino.leilao.repository.EmpresaRepository;
 import com.higotlino.leilao.repository.LeilaoRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +19,9 @@ public class LeilaoService {
 
     @Transactional(readOnly = true)
     public Leilao getById(Long id){
-        return leilaoRepository.findById(id).orElse(null);
+        return leilaoRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Leilao não encontrado")
+        );
     }
 
     @Transactional(readOnly = true)
@@ -30,7 +32,7 @@ public class LeilaoService {
     @Transactional
     public Leilao create(Leilao leilao, Long vendedorId) {
         Empresa vendedor = empresaRepository.findById(vendedorId)
-                .orElseThrow(() -> new EntityNotFoundException("Vendedor não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Vendedor não encontrado"));
         leilao.setVendedor(vendedor);
         return leilaoRepository.save(leilao);
     }
@@ -42,9 +44,9 @@ public class LeilaoService {
 
     @Transactional
     public void delete(Long id) {
-        leilaoRepository.findById(id)
-                .ifPresent(
-                        leilao -> leilaoRepository.deleteById(id)
-                );
+        leilaoRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Leilao não encontrado")
+        );
+        leilaoRepository.deleteById(id);
     }
 }

@@ -37,29 +37,22 @@ public class EmpresaController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<EmpresaResponse>> getById(@PathVariable Long id){
         Empresa empresa = service.getById(id);
-        if(empresa == null){
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Empresa encontrada", mapper.toResponse(empresa), null));
+        return ResponseEntity.ok(ApiResponse.ok("Empresa encontrada", mapper.toResponse(empresa)));
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse<EmpresaResponse>> create(@RequestBody @Validated EmpresaRequest request){
         Empresa empresa = mapper.toEntity(request);
         Empresa saved = service.create(empresa);
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Empresa criada", mapper.toResponse(saved), null));
+        return ResponseEntity.ok(ApiResponse.ok("Empresa criada", mapper.toResponse(saved)));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<EmpresaResponse>> update(@PathVariable Long id, @RequestBody @Validated EmpresaUpdateRequest request){
         Empresa empresa = service.getById(id);
-        if(empresa == null){
-            return ResponseEntity.notFound().build();
-        }
         mapper.updateEntity(request, empresa);
         Empresa saved = service.update(empresa);
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Empresa atualizada", mapper.toResponse(saved), null));
+        return ResponseEntity.ok(ApiResponse.ok("Empresa atualizada", mapper.toResponse(saved)));
     }
 
     @DeleteMapping("/{id}")

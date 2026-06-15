@@ -1,9 +1,16 @@
 package com.higotlino.leilao.dto.Comprador;
 
-public record CompradorResponse(
-        Long empresaId,
-        String razaoSocial,
-        Long leilaoId,
-        String descricaoLeilao
-) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CompradorResponse {
+    private Long empresaId;
+    private String razaoSocial;
+    private Long leilaoId;
+    private String descricaoLeilao;
 }

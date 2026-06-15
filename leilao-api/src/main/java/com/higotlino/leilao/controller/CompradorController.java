@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/comprador")
@@ -38,24 +39,24 @@ public class CompradorController {
     public ResponseEntity<ApiResponse<List<CompradorResponse>>> getByLeilao(
             @PathVariable Long leilaoId) {
         List<CompradorResponse> list = service.getByLeilaoId(leilaoId)
-                .stream().map(mapper::toResponse).toList();
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Compradores encontrados", list, null));
+                .stream().map(mapper::toResponse).collect(Collectors.toList());
+        return ResponseEntity.ok(ApiResponse.ok("Compradores encontrados", list));
     }
 
     @GetMapping("/empresa/{empresaId}")
     public ResponseEntity<ApiResponse<List<CompradorResponse>>> getByEmpresa(
             @PathVariable Long empresaId) {
         List<CompradorResponse> list = service.getByEmpresaId(empresaId)
-                .stream().map(mapper::toResponse).toList();
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Compradores encontrados", list, null));
+                .stream().map(mapper::toResponse).collect(Collectors.toList());
+        return ResponseEntity.ok(ApiResponse.ok("Compradores encontrados", list));
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse<CompradorResponse>> create(
             @RequestBody @Validated CreateCompradorRequest request) {
-        Comprador saved = service.create(request.leilaoId(), request.empresaId());
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Comprador vinculado",
-                mapper.toResponse(saved), null));
+        Comprador saved = service.create(request.getLeilaoId(), request.getEmpresaId());
+        return ResponseEntity.ok(ApiResponse.ok("Comprador vinculado",
+                mapper.toResponse(saved)));
     }
 
     @DeleteMapping

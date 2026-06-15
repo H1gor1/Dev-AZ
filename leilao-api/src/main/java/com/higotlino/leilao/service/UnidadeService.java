@@ -1,6 +1,7 @@
 package com.higotlino.leilao.service;
 
 import com.higotlino.leilao.entity.Unidade;
+import com.higotlino.leilao.exception.ResourceNotFoundException;
 import com.higotlino.leilao.repository.UnidadeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,7 +17,9 @@ public class UnidadeService {
 
     @Transactional(readOnly = true)
     public Unidade getById(Long id) {
-        return unidadeRepository.findById(id).orElse(null);
+        return unidadeRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Unidade não encontrada")
+        );
     }
 
     @Transactional(readOnly = true)
@@ -36,6 +39,9 @@ public class UnidadeService {
 
     @Transactional
     public void delete(Long id) {
+        unidadeRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Unidade não encontrada")
+        );
         unidadeRepository.deleteById(id);
     }
 }

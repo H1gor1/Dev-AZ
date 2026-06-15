@@ -1,8 +1,15 @@
 package com.higotlino.leilao.dto.Unidade;
 
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public record CreateUnidadeRequest(
-        @NotNull String nome
-) {
+import javax.validation.constraints.NotBlank;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateUnidadeRequest{
+        @NotBlank(message = "Nome e obrigatorio.")
+        String nome;
 }

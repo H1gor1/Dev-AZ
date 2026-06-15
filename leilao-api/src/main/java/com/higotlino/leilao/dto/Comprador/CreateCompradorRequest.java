@@ -1,8 +1,17 @@
 package com.higotlino.leilao.dto.Comprador;
 
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public record CreateCompradorRequest(
-        @NotNull Long empresaId,
-        @NotNull Long leilaoId
-) {}
+import javax.validation.constraints.NotNull;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateCompradorRequest {
+    @NotNull(message = "Id da empresa é necessário.")
+    Long empresaId;
+    @NotNull(message = "Id do leilão é necessário.")
+    Long leilaoId;
+}

@@ -38,11 +38,8 @@ public class UnidadeController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<UnidadeResponse>> getById(@PathVariable Long id) {
         Unidade unidade = service.getById(id);
-        if (unidade == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Unidade encontrada",
-                mapper.toResponse(unidade), null));
+        return ResponseEntity.ok(ApiResponse.ok("Unidade encontrada",
+                mapper.toResponse(unidade)));
     }
 
     @PostMapping
@@ -50,8 +47,8 @@ public class UnidadeController {
             @RequestBody @Validated CreateUnidadeRequest request) {
         Unidade unidade = mapper.toEntity(request);
         Unidade saved = service.create(unidade);
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Unidade criada",
-                mapper.toResponse(saved), null));
+        return ResponseEntity.ok(ApiResponse.ok("Unidade criada",
+                mapper.toResponse(saved)));
     }
 
     @PutMapping("/{id}")
@@ -59,13 +56,10 @@ public class UnidadeController {
             @PathVariable Long id,
             @RequestBody @Validated UpdateUnidadeRequest request) {
         Unidade unidade = service.getById(id);
-        if (unidade == null) {
-            return ResponseEntity.notFound().build();
-        }
         mapper.updateEntity(request, unidade);
         Unidade saved = service.update(unidade);
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Unidade atualizada",
-                mapper.toResponse(saved), null));
+        return ResponseEntity.ok(ApiResponse.ok("Unidade atualizada",
+                mapper.toResponse(saved)));
     }
 
     @DeleteMapping("/{id}")

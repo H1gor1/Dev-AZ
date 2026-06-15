@@ -2,19 +2,25 @@ package com.higotlino.leilao.dto.Lote;
 
 import com.higotlino.leilao.dto.Leilao.LeilaoResponse;
 import com.higotlino.leilao.dto.Unidade.UnidadeResponse;
-import com.higotlino.leilao.entity.Unidade;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-public record LoteResponse(
-        Long id,
-        int numeroLote,
-        String descricao,
-        double quantidade,
-        double valorInicial,
-        UnidadeResponse unidade,
-        LeilaoResponse leilao,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
-) {
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+public class LoteResponse{
+        Long id;
+        int numeroLote;
+        String descricao;
+        double quantidade;
+        double valorInicial;
+        UnidadeResponse unidade;
+        LeilaoResponse leilao;
+        LocalDateTime createdAt;
+        LocalDateTime updatedAt;
 }

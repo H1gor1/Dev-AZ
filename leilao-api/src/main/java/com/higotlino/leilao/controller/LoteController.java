@@ -38,20 +38,17 @@ public class LoteController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<LoteResponse>> getById(@PathVariable Long id) {
         Lote lote = service.getById(id);
-        if (lote == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Lote encontrado",
-                mapper.toResponse(lote), null));
+        return ResponseEntity.ok(ApiResponse.ok("Lote encontrado",
+                mapper.toResponse(lote)));
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse<LoteResponse>> create(
             @RequestBody @Validated CreateLoteRequest request) {
         Lote lote = mapper.toEntity(request);
-        Lote saved = service.create(lote, request.unidadeId(), request.leilaoId());
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Lote criado",
-                mapper.toResponse(saved), null));
+        Lote saved = service.create(lote, request.getUnidadeId(), request.getLeilaoId());
+        return ResponseEntity.ok(ApiResponse.ok("Lote criado",
+                mapper.toResponse(saved)));
     }
 
     @PutMapping("/{id}")
@@ -59,13 +56,10 @@ public class LoteController {
             @PathVariable Long id,
             @RequestBody @Validated UpdateLoteRequest request) {
         Lote lote = service.getById(id);
-        if (lote == null) {
-            return ResponseEntity.notFound().build();
-        }
         mapper.updateEntity(request, lote);
-        Lote saved = service.update(lote, request.unidadeId());
-        return ResponseEntity.ok(new ApiResponse<>("OK", "Lote atualizado",
-                mapper.toResponse(saved), null));
+        Lote saved = service.update(lote, request.getUnidadeId());
+        return ResponseEntity.ok(ApiResponse.ok("Lote atualizado",
+                mapper.toResponse(saved)));
     }
 
     @DeleteMapping("/{id}")
