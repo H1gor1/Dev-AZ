@@ -72,8 +72,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(ApiErrorResponse.of("Conflito de dados",
-                        "Violacao de integridade", request.getRequestURI()));
+                .body(ApiErrorResponse.of("Conflito de dados", ex.getMessage(), request.getRequestURI()));
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
