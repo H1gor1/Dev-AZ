@@ -29,9 +29,17 @@ public class EmpresaService {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<EmpresaResponse>>> getAll(@PageableDefault(size = 10) Pageable pageable){
-        Page<EmpresaResponse> empresas = empresaBO.paginate(pageable).map(mapper::toResponse);
-        return ResponseEntity.ok(ApiResponse.ok( "Empresas encontradas", empresas));
+    public ResponseEntity<ApiResponse<List<EmpresaResponse>>> getAll(
+            @PageableDefault(size = 10) Pageable pageable,
+            @RequestParam(required = false) String razaoSocial,
+            @RequestParam(required = false) String cnpj,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String usuario) {
+
+        Page<EmpresaResponse> empresas = empresaBO
+                .paginate(razaoSocial, cnpj, email, usuario, pageable)
+                .map(mapper::toResponse);
+        return ResponseEntity.ok(ApiResponse.ok("Empresas encontradas", empresas));
     }
 
     @GetMapping("/{id}")

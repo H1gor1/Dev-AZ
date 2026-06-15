@@ -30,8 +30,11 @@ public class UnidadeService {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<UnidadeResponse>>> getAll(
-            @PageableDefault(size = 10) Pageable pageable) {
-        Page<UnidadeResponse> page = unidadeBO.paginate(pageable).map(mapper::toResponse);
+            @PageableDefault(size = 10) Pageable pageable,
+            @RequestParam(required = false) String nome) {
+
+        Page<UnidadeResponse> page = unidadeBO.paginate(nome, pageable)
+                .map(mapper::toResponse);
         return ResponseEntity.ok(ApiResponse.ok("Unidades encontradas", page));
     }
 

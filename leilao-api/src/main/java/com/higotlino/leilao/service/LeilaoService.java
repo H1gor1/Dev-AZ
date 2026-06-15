@@ -28,8 +28,12 @@ public class LeilaoService {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<LeilaoResponse>>> getAll(@PageableDefault(size = 10) Pageable pageable){
-        Page<LeilaoResponse> leiloes = leilaoBO.paginate(pageable).map(mapper::toResponse);
+    public ResponseEntity<ApiResponse<List<LeilaoResponse>>> getAll(
+            @PageableDefault(size = 10) Pageable pageable,
+            @RequestParam(required = false) Integer codigo,
+            @RequestParam(required = false) String descricao
+    ){
+        Page<LeilaoResponse> leiloes = leilaoBO.paginate(codigo, descricao, pageable).map(mapper::toResponse);
         return ResponseEntity.ok(ApiResponse.ok("Leiloes encontrados", leiloes));
     }
 

@@ -3,10 +3,12 @@ package com.higotlino.leilao.business;
 import com.higotlino.leilao.entity.Empresa;
 import com.higotlino.leilao.exception.ResourceNotFoundException;
 import com.higotlino.leilao.repository.EmpresaRepository;
+import com.higotlino.leilao.specification.EmpresaSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +25,16 @@ public class EmpresaBO {
                 .orElseThrow(() -> new ResourceNotFoundException("Empresa nao encontrada"));
     }
 
-    @Transactional (readOnly = true)
-    public Page<Empresa> paginate(Pageable pageable) {
-        return empresaRepository.findAll(pageable);
+    @Transactional(readOnly = true)
+    public Page<Empresa> paginate(String razaoSocial, String cnpj, String email,
+                                  String usuario, Pageable pageable) {
+        Specification<Empresa> spec = Specification
+                .where(EmpresaSpecification.razaoSocialContains(razaoSocial))
+                .and(EmpresaSpecification.cnpjEquals(cnpj))
+                .and(EmpresaSpecification.emailContains(email))
+                .and(EmpresaSpecification.usuarioEquals(usuario));
+
+        return empresaRepository.findAll(spec, pageable);
     }
 
     @Transactional

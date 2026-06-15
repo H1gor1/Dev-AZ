@@ -30,8 +30,12 @@ public class LoteService {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<LoteResponse>>> getAll(
-            @PageableDefault(size = 10) Pageable pageable) {
-        Page<LoteResponse> page = loteBO.paginate(pageable).map(mapper::toResponse);
+            @PageableDefault(size = 10) Pageable pageable,
+            @RequestParam(required = false) String descricao,
+            @RequestParam(required = false) Integer numeroLote) {
+
+        Page<LoteResponse> page = loteBO.paginate(descricao, numeroLote, pageable)
+                .map(mapper::toResponse);
         return ResponseEntity.ok(ApiResponse.ok("Lotes encontrados", page));
     }
 

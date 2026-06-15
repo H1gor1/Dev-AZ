@@ -3,9 +3,11 @@ package com.higotlino.leilao.business;
 import com.higotlino.leilao.entity.Unidade;
 import com.higotlino.leilao.exception.ResourceNotFoundException;
 import com.higotlino.leilao.repository.UnidadeRepository;
+import com.higotlino.leilao.specification.UnidadeSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +25,11 @@ public class UnidadeBO {
     }
 
     @Transactional(readOnly = true)
-    public Page<Unidade> paginate(Pageable pageable) {
-        return unidadeRepository.findAll(pageable);
+    public Page<Unidade> paginate(String nome, Pageable pageable) {
+        Specification<Unidade> spec = Specification
+                .where(UnidadeSpecification.nomeContains(nome));
+
+        return unidadeRepository.findAll(spec, pageable);
     }
 
     @Transactional

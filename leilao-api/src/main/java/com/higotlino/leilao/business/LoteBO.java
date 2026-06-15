@@ -7,9 +7,11 @@ import com.higotlino.leilao.exception.ResourceNotFoundException;
 import com.higotlino.leilao.repository.LeilaoRepository;
 import com.higotlino.leilao.repository.LoteRepository;
 import com.higotlino.leilao.repository.UnidadeRepository;
+import com.higotlino.leilao.specification.LoteSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +31,12 @@ public class LoteBO {
     }
 
     @Transactional(readOnly = true)
-    public Page<Lote> paginate(Pageable pageable) {
-        return loteRepository.findAll(pageable);
+    public Page<Lote> paginate(String descricao, Integer numeroLote, Pageable pageable) {
+        Specification<Lote> spec = Specification
+                .where(LoteSpecification.descricaoContains(descricao))
+                .and(LoteSpecification.numeroLoteEquals(numeroLote));
+
+        return loteRepository.findAll(spec, pageable);
     }
 
     @Transactional
