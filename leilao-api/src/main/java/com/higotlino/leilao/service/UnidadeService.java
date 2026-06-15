@@ -1,47 +1,70 @@
 package com.higotlino.leilao.service;
 
+import com.higotlino.leilao.dto.ApiResponse;
+import com.higotlino.leilao.dto.Unidade.CreateUnidadeRequest;
+import com.higotlino.leilao.dto.Unidade.UnidadeMapper;
+import com.higotlino.leilao.dto.Unidade.UnidadeResponse;
+import com.higotlino.leilao.dto.Unidade.UpdateUnidadeRequest;
 import com.higotlino.leilao.entity.Unidade;
-import com.higotlino.leilao.exception.ResourceNotFoundException;
-import com.higotlino.leilao.repository.UnidadeRepository;
-import lombok.RequiredArgsConstructor;
+import com.higotlino.leilao.business.UnidadeBO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-@Service
-@RequiredArgsConstructor
+import java.util.List;
+
+@RestController
+@RequestMapping("/unidade")
 public class UnidadeService {
 
-    private final UnidadeRepository unidadeRepository;
+    private final UnidadeBO unidadeBO;
+    private final UnidadeMapper mapper;
 
-    @Transactional(readOnly = true)
-    public Unidade getById(Long id) {
-        return unidadeRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Unidade não encontrada")
-        );
+    public UnidadeService(UnidadeBO unidadeBO, UnidadeMapper mapper) {
+        this.unidadeBO = unidadeBO;
+        this.mapper = mapper;
     }
 
-    @Transactional(readOnly = true)
-    public Page<Unidade> paginate(Pageable pageable) {
-        return unidadeRepository.findAll(pageable);
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<UnidadeResponse>>> getAll(
+            @PageableDefault(size = 10) Pageable pageable) {
+        Page<UnidadeResponse> page = unidadeBO.paginate(pageable).map(mapper::toResponse);
+        return ResponseEntity.ok(ApiResponse.ok("Unidades encontradas", page));
     }
 
-    @Transactional
-    public Unidade create(Unidade unidade) {
-        return unidadeRepository.save(unidade);
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<UnidadeResponse>> getById(@PathVariable Long id) {
+        Unidade unidade = unidadeBO.getById(id);
+        return ResponseEntity.ok(ApiResponse.ok("Unidade encontrada",
+                mapper.toResponse(unidade)));
     }
 
-    @Transactional
-    public Unidade update(Unidade unidade) {
-        return unidadeRepository.save(unidade);
+    @PostMapping
+    public ResponseEntity<ApiResponse<UnidadeResponse>> create(
+            @RequestBody @Validated CreateUnidadeRequest request) {
+        Unidade unidade = mapper.toEntity(request);
+        Unidade saved = unidadeBO.create(unidade);
+        return ResponseEntity.ok(ApiResponse.ok("Unidade criada",
+                mapper.toResponse(saved)));
     }
 
-    @Transactional
-    public void delete(Long id) {
-        unidadeRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Unidade não encontrada")
-        );
-        unidadeRepository.deleteById(id);
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<UnidadeResponse>> update(
+            @PathVariable Long id,
+            @RequestBody @Validated UpdateUnidadeRequest request) {
+        Unidade unidade = unidadeBO.getById(id);
+        mapper.updateEntity(request, unidade);
+        Unidade saved = unidadeBO.update(unidade);
+        return ResponseEntity.ok(ApiResponse.ok("Unidade atualizada",
+                mapper.toResponse(saved)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        unidadeBO.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

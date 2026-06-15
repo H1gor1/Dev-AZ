@@ -1,64 +1,70 @@
 package com.higotlino.leilao.service;
 
-import com.higotlino.leilao.entity.Leilao;
+import com.higotlino.leilao.dto.ApiResponse;
+import com.higotlino.leilao.dto.Lote.CreateLoteRequest;
+import com.higotlino.leilao.dto.Lote.LoteMapper;
+import com.higotlino.leilao.dto.Lote.LoteResponse;
+import com.higotlino.leilao.dto.Lote.UpdateLoteRequest;
 import com.higotlino.leilao.entity.Lote;
-import com.higotlino.leilao.entity.Unidade;
-import com.higotlino.leilao.exception.ResourceNotFoundException;
-import com.higotlino.leilao.repository.LeilaoRepository;
-import com.higotlino.leilao.repository.LoteRepository;
-import com.higotlino.leilao.repository.UnidadeRepository;
-import lombok.RequiredArgsConstructor;
+import com.higotlino.leilao.business.LoteBO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-@Service
-@RequiredArgsConstructor
+import java.util.List;
+
+@RestController
+@RequestMapping("/lote")
 public class LoteService {
 
-    private final LoteRepository loteRepository;
-    private final UnidadeRepository unidadeRepository;
-    private final LeilaoRepository leilaoRepository;
+    private final LoteBO loteBO;
+    private final LoteMapper mapper;
 
-    @Transactional(readOnly = true)
-    public Lote getById(Long id) {
-        return loteRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Lote não encontrado")
-        );
+    public LoteService(LoteBO loteBO, LoteMapper mapper) {
+        this.loteBO = loteBO;
+        this.mapper = mapper;
     }
 
-    @Transactional(readOnly = true)
-    public Page<Lote> paginate(Pageable pageable) {
-        return loteRepository.findAll(pageable);
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<LoteResponse>>> getAll(
+            @PageableDefault(size = 10) Pageable pageable) {
+        Page<LoteResponse> page = loteBO.paginate(pageable).map(mapper::toResponse);
+        return ResponseEntity.ok(ApiResponse.ok("Lotes encontrados", page));
     }
 
-    @Transactional
-    public Lote create(Lote lote, Long unidadeId, Long leilaoId) {
-        Unidade unidade = unidadeRepository.findById(unidadeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Unidade nao encontrada"));
-        Leilao leilao = leilaoRepository.findById(leilaoId)
-                .orElseThrow(() -> new ResourceNotFoundException("Leilao nao encontrado"));
-        lote.setUnidade(unidade);
-        lote.setLeilao(leilao);
-        return loteRepository.save(lote);
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<LoteResponse>> getById(@PathVariable Long id) {
+        Lote lote = loteBO.getById(id);
+        return ResponseEntity.ok(ApiResponse.ok("Lote encontrado",
+                mapper.toResponse(lote)));
     }
 
-    @Transactional
-    public Lote update(Lote lote, Long unidadeId) {
-        if (unidadeId != null) {
-            Unidade unidade = unidadeRepository.findById(unidadeId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Unidade nao encontrada"));
-            lote.setUnidade(unidade);
-        }
-        return loteRepository.save(lote);
+    @PostMapping
+    public ResponseEntity<ApiResponse<LoteResponse>> create(
+            @RequestBody @Validated CreateLoteRequest request) {
+        Lote lote = mapper.toEntity(request);
+        Lote saved = loteBO.create(lote, request.getUnidadeId(), request.getLeilaoId());
+        return ResponseEntity.ok(ApiResponse.ok("Lote criado",
+                mapper.toResponse(saved)));
     }
 
-    @Transactional
-    public void delete(Long id) {
-        loteRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Lote nao encontrado")
-        );
-        loteRepository.deleteById(id);
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<LoteResponse>> update(
+            @PathVariable Long id,
+            @RequestBody @Validated UpdateLoteRequest request) {
+        Lote lote = loteBO.getById(id);
+        mapper.updateEntity(request, lote);
+        Lote saved = loteBO.update(lote, request.getUnidadeId());
+        return ResponseEntity.ok(ApiResponse.ok("Lote atualizado",
+                mapper.toResponse(saved)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        loteBO.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

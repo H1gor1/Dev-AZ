@@ -1,69 +1,69 @@
 package com.higotlino.leilao.service;
 
+import com.higotlino.leilao.business.CompradorBO;
+import com.higotlino.leilao.dto.ApiResponse;
+import com.higotlino.leilao.dto.Comprador.CompradorMapper;
+import com.higotlino.leilao.dto.Comprador.CompradorResponse;
+import com.higotlino.leilao.dto.Comprador.CreateCompradorRequest;
 import com.higotlino.leilao.entity.Comprador;
-import com.higotlino.leilao.entity.Empresa;
-import com.higotlino.leilao.entity.Leilao;
-import com.higotlino.leilao.exception.ResourceNotFoundException;
-import com.higotlino.leilao.repository.CompradorRepository;
-import com.higotlino.leilao.repository.EmpresaRepository;
-import com.higotlino.leilao.repository.LeilaoRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Service
-@RequiredArgsConstructor
+@RestController
+@RequestMapping("/comprador")
 public class CompradorService {
-    private final CompradorRepository compradorRepository;
-    private final LeilaoRepository leilaoRepository;
-    private final EmpresaRepository empresaRepository;
 
-    @Transactional(readOnly = true)
-    public List<Comprador> getByLeilaoId(Long leilaoId) {
-        leilaoRepository.findById(leilaoId).orElseThrow(
-                () -> new ResourceNotFoundException("Leilao nao encontrado")
-        );
+    private final CompradorBO compradorBO;
+    private final CompradorMapper mapper;
 
-        return compradorRepository.findByLeilaoId(leilaoId);
+    public CompradorService(CompradorBO compradorBO, CompradorMapper mapper) {
+        this.compradorBO = compradorBO;
+        this.mapper = mapper;
     }
 
-    @Transactional(readOnly = true)
-    public List<Comprador> getByEmpresaId(Long empresaId) {
-        empresaRepository.findById(empresaId).orElseThrow(
-                () -> new ResourceNotFoundException("Empresa nao encontrada")
-        );
-        return compradorRepository.findByEmpresaId(empresaId);
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<CompradorResponse>>> getAll(
+            @PageableDefault(size = 10) Pageable pageable) {
+        Page<CompradorResponse> page = compradorBO.paginate(pageable).map(mapper::toResponse);
+        return ResponseEntity.ok(ApiResponse.ok("Compradores encontrados", page));
     }
 
-    @Transactional (readOnly = true)
-    public Page<Comprador> paginate(Pageable pageable) {
-        return compradorRepository.findAll(pageable);
+    @GetMapping("/leilao/{leilaoId}")
+    public ResponseEntity<ApiResponse<List<CompradorResponse>>> getByLeilao(
+            @PathVariable Long leilaoId) {
+        List<CompradorResponse> list = compradorBO.getByLeilaoId(leilaoId)
+                .stream().map(mapper::toResponse).collect(Collectors.toList());
+        return ResponseEntity.ok(ApiResponse.ok("Compradores encontrados", list));
     }
 
-    @Transactional
-    public Comprador create(Long leilaoId, Long empresaId) {
-        Leilao leilao = leilaoRepository.findById(leilaoId).orElseThrow(
-                () -> new ResourceNotFoundException("Leilao nao encontrado")
-        );
-        Empresa empresa = empresaRepository.findById(empresaId).orElseThrow(
-                () -> new ResourceNotFoundException("Empresa nao encontrada")
-        );
-
-        Comprador comprador = new Comprador();
-        comprador.setLeilao(leilao);
-        comprador.setEmpresa(empresa);
-        return compradorRepository.save(comprador);
+    @GetMapping("/empresa/{empresaId}")
+    public ResponseEntity<ApiResponse<List<CompradorResponse>>> getByEmpresa(
+            @PathVariable Long empresaId) {
+        List<CompradorResponse> list = compradorBO.getByEmpresaId(empresaId)
+                .stream().map(mapper::toResponse).collect(Collectors.toList());
+        return ResponseEntity.ok(ApiResponse.ok("Compradores encontrados", list));
     }
 
-    @Transactional
-    public void delete(Long empresaId, Long leilaoId) {
-        if (!compradorRepository.existsByEmpresaIdAndLeilaoId(empresaId, leilaoId))
-            throw new ResourceNotFoundException("Comprador nao encontrado");
-        compradorRepository.deleteByEmpresaIdAndLeilaoId(empresaId, leilaoId);
+    @PostMapping
+    public ResponseEntity<ApiResponse<CompradorResponse>> create(
+            @RequestBody @Validated CreateCompradorRequest request) {
+        Comprador saved = compradorBO.create(request.getLeilaoId(), request.getEmpresaId());
+        return ResponseEntity.ok(ApiResponse.ok("Comprador vinculado",
+                mapper.toResponse(saved)));
     }
 
+    @DeleteMapping
+    public ResponseEntity<Void> delete(
+            @RequestParam Long empresaId,
+            @RequestParam Long leilaoId) {
+        compradorBO.delete(empresaId, leilaoId);
+        return ResponseEntity.noContent().build();
+    }
 }
