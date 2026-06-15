@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import {Navbar} from './navbar/navbar';
 import {RouterOutlet} from '@angular/router';
+import {Toast} from 'primeng/toast';
 
 @Component({
   selector: 'app-layout',
   imports: [
     Navbar,
-    RouterOutlet
+    RouterOutlet,
+    Toast
   ],
   templateUrl: './layout.html',
 })
