@@ -1,16 +1,18 @@
 import { Component, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { DataTable, Column, Action, CellEditEvent } from '../../shared/components/data-table/data-table';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { UnidadeService } from '../../core/services/unidade.service';
 import { UnidadeResponse, UpdateUnidadeRequest } from '../../core/models/unidade.model';
-import { EmpresaResponse } from '../../core/models/empresa.model';
 
 
 @Component({
   selector: 'app-unidades',
-  imports: [DataTable, ButtonModule],
+  imports: [DataTable, ButtonModule, DialogModule, InputTextModule, FormsModule],
   templateUrl: './unidades.html',
 })
 export class Unidades {
@@ -22,6 +24,9 @@ export class Unidades {
   loading = signal(false);
   totalRecords = signal(0);
 
+  dialogVisible = false;
+  novoNome = '';
+
   cols: Column[] = [
     {field: 'nome', header: "Nome", editable: true},
     {field: 'createdAt', header: "Data de criação"},
@@ -31,6 +36,27 @@ export class Unidades {
   actions: Action<UnidadeResponse>[] = [
     {icon: 'trash', label: 'Excluir', severity: 'danger', onClick: (row) => this.excluir(row)}
   ]
+
+  showDialog(): void {
+    this.novoNome = '';
+    this.dialogVisible = true;
+  }
+
+  salvar(): void {
+    if (!this.novoNome.trim()) return;
+
+    this.service.criar({ nome: this.novoNome.trim() }).subscribe({
+      next: () => {
+        this.ms.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Unidade criada com sucesso'
+        });
+        this.dialogVisible = false;
+        this.carregar({ first: 0, rows: 10 });
+      }
+    });
+  }
 
   carregar(event: TableLazyLoadEvent): void {
     this.loading.set(true);
@@ -59,7 +85,6 @@ export class Unidades {
         }
       });
   }
-
 
   excluir(row: UnidadeResponse): void {
     this.cs.confirm({

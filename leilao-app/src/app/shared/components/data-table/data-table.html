@@ -46,13 +46,13 @@
         }
         @if (actions.length) {
           <td class="text-center">
-            <p-menu #menu [model]="menuFor(rowData)" [popup]="true" appendTo="body" />
+            <p-menu #menu [popup]="true" appendTo="body" />
             <p-button
               icon="pi pi-ellipsis-v"
               [text]="true"
               [rounded]="true"
               size="small"
-              (onClick)="menu.toggle($event)"
+              (click)="toggleMenu(menu, rowData, $event)"
             />
           </td>
         }

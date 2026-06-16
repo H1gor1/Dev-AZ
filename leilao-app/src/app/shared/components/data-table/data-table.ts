@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
@@ -46,12 +45,13 @@ export class DataTable<T> {
     return this.cols.some((c) => c.editable);
   }
 
-  menuFor(row: T): MenuItem[] {
-    return this.actions.map((a) => ({
+  toggleMenu(menu: any, row: T, event: Event): void {
+    menu.model = this.actions.map((a) => ({
       icon: 'pi pi-' + a.icon,
       label: a.label,
       command: () => a.onClick(row),
     }));
+    menu.toggle(event);
   }
 
   cellValue(col: Column, row: T): string {

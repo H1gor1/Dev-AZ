@@ -1,7 +1,18 @@
 <div class="p-4">
   <div class="flex justify-between items-center mb-4">
     <h1 class="text-xl font-semibold">Unidades</h1>
-    <p-button label="Nova" icon="pi pi-plus" routerLink="/empresa" />
+    <p-button label="Nova" icon="pi pi-plus" (click)="showDialog()" />
+
+    <p-dialog header="Nova Unidade" [modal]="true" [(visible)]="dialogVisible" [style]="{ width: '25rem' }">
+      <div class="flex items-center gap-4 mb-4">
+        <label for="nome" class="font-semibold w-24">Nome</label>
+        <input pInputText id="nome" class="flex-auto" [(ngModel)]="novoNome" autocomplete="off" />
+      </div>
+      <div class="flex justify-end gap-2">
+        <p-button label="Cancelar" severity="secondary" (click)="dialogVisible = false" />
+        <p-button label="Salvar" (click)="salvar()" />
+      </div>
+    </p-dialog>
   </div>
 
   <app-data-table
