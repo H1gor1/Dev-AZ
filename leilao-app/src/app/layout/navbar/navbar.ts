@@ -32,11 +32,6 @@ export class Navbar implements OnInit {
         icon: 'pi pi-tag',
         routerLink: '/leilao',
       },
-      {
-        label: 'Lotes',
-        icon: 'pi pi-list',
-        routerLink: '/lote',
-      },
     ];
   }
 }
