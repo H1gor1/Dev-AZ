@@ -31,10 +31,11 @@ public class LoteBO {
     }
 
     @Transactional(readOnly = true)
-    public Page<Lote> paginate(String descricao, Integer numeroLote, Pageable pageable) {
+    public Page<Lote> paginate(String descricao, Integer numeroLote, Long leilaoId, Pageable pageable) {
         Specification<Lote> spec = Specification
                 .where(LoteSpecification.descricaoContains(descricao))
-                .and(LoteSpecification.numeroLoteEquals(numeroLote));
+                .and(LoteSpecification.numeroLoteEquals(numeroLote))
+                .and(LoteSpecification.leilaoIdEquals(leilaoId));
 
         return loteRepository.findAll(spec, pageable);
     }

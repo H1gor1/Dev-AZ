@@ -14,4 +14,9 @@ public class LoteSpecification {
         return (root, query, cb) -> value == null ? null
                 : cb.equal(root.get("numeroLote"), value);
     }
+
+    public static Specification<Lote> leilaoIdEquals(Long value) {
+        return (root, query, cb) -> value == null ? null
+                : cb.equal(root.get("leilao").get("id"), value);
+    }
 }

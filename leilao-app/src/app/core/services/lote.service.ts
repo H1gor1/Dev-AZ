@@ -17,10 +17,14 @@ export class LoteService {
 
   constructor(private http: HttpClient) {}
 
-  listar(page: number = 0, size: number = 10): Observable<ApiResponse<LoteResponse[]>> {
-    const params = new HttpParams()
+  listar(page: number = 0, size: number = 10, leilaoId?: number): Observable<ApiResponse<LoteResponse[]>> {
+    let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
+
+    if (leilaoId != null) {
+      params = params.set('leilaoId', leilaoId.toString());
+    }
 
     return this.http.get<ApiResponse<LoteResponse[]>>(this.apiUrl, { params });
   }
