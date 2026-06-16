@@ -1,7 +1,5 @@
 package com.higotlino.leilao.dto.Leilao;
 
-import javax.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class LeilaoUpdateRequest{
         Integer codigo;
-        @Length(max = 60, message = "Descricao deve ter no maximo 60 caracteres.")
+        @Length(min = 1, max = 60, message = "Descricao deve ter entre 1 e 60 caracteres.")
         String descricao;
         LocalDateTime inicioPrevisto;
 }

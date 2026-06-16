@@ -3,12 +3,14 @@ package com.higotlino.leilao.dto.Lote;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateLoteRequest{
     Integer numeroLote;
+    @Length(min = 1, max = 60, message = "Descricao deve ter entre 1 e 60 caracteres.")
     String descricao;
     Double quantidade;
     Double valorInicial;
