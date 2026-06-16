@@ -9,9 +9,9 @@ services:
     volumes:
       - "postgresqldata:/var/lib/postgresql"
     environment:
-      POSTGRES_DB: ${DB_DATABASE:?}
-      POSTGRES_USER: ${DB_USERNAME:?}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:?}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
 
   api:
     build:

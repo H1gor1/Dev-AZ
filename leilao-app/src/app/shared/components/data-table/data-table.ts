@@ -30,7 +30,6 @@ export interface CellEditEvent<T> {
   selector: 'app-data-table',
   imports: [TableModule, FormsModule, InputTextModule, ButtonModule, MenuModule],
   templateUrl: './data-table.html',
-  styleUrl: './data-table.css',
 })
 export class DataTable<T> {
   @Input() items: T[] = [];
