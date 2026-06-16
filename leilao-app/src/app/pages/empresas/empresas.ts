@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TableLazyLoadEvent } from 'primeng/table';
@@ -17,6 +17,7 @@ import { TelefonePipe } from '../../shared/pipes/telefone.pipe';
 export class Empresas {
   private service = inject(EmpresaService);
   private cs = inject(ConfirmationService);
+  private router = inject(Router);
   private cnpjPipe = new CnpjPipe();
   private fonePipe = new TelefonePipe();
 
@@ -49,7 +50,7 @@ export class Empresas {
   }
 
   editar(row: EmpresaResponse): void {
-    // TODO: navegar pra /empresa/:id
+    this.router.navigate(['/empresa', row.id]);
   }
 
   excluir(row: EmpresaResponse): void {

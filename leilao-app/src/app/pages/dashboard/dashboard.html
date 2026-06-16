@@ -1,14 +1,29 @@
-<div class="container mx-auto p-8">
-  <div class="grid grid-cols-2 grid-rows-5 gap-4">
-    <div class="col-span-2 row-span-3">
-      <div class="items-center justify-center text-center">
-        <h1 class="text-6xl mb-4">Leilões</h1>
-        <p>Esta aplicação tem como objetivo cumprir o teste técnico para empresa AZ Tecnologia e Gestão.</p>
-      </div>
-    </div>
-    <div class="row-start-4 bg-red-500">2</div>
-    <div class="row-start-4 bg-red-500">3</div>
-    <div class="row-start-5 bg-red-500">4</div>
-    <div class="row-start-5 bg-red-500">5</div>
+<div class="flex flex-col items-center justify-center min-h-[70vh] gap-8 p-8">
+  <div class="text-center">
+    <h1 class="text-5xl font-bold mb-2">Leilões AZ</h1>
+    <p class="text-gray-500 text-lg">Sistema de gestão de leilões</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl">
+    <p-card styleClass="text-center">
+      <i class="pi pi-building text-4xl text-blue-500 mb-3 block"></i>
+      <h2 class="text-lg font-semibold mb-1">Empresas</h2>
+      <p class="text-sm text-gray-500 mb-4">Gerencie empresas participantes</p>
+      <p-button label="Acessar" severity="secondary" routerLink="/empresas" fluid />
+    </p-card>
+
+    <p-card styleClass="text-center">
+      <i class="pi pi-box text-4xl text-green-500 mb-3 block"></i>
+      <h2 class="text-lg font-semibold mb-1">Unidades</h2>
+      <p class="text-sm text-gray-500 mb-4">Cadastro de unidades</p>
+      <p-button label="Acessar" severity="secondary" routerLink="/unidade" fluid />
+    </p-card>
+
+    <p-card styleClass="text-center">
+      <i class="pi pi-gavel text-4xl text-orange-500 mb-3 block"></i>
+      <h2 class="text-lg font-semibold mb-1">Leilões</h2>
+      <p class="text-sm text-gray-500 mb-4">Consulte leilões ativos</p>
+      <p-button label="Acessar" severity="secondary" routerLink="/leilao" fluid />
+    </p-card>
   </div>
 </div>

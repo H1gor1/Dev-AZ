@@ -8,12 +8,14 @@ import Aura from '@primeuix/themes/aura';
 import {provideHttpClient, withInterceptors, withFetch} from '@angular/common/http';
 import {errorInterceptor} from './core/interceptors/error-interceptor';
 import {MessageService, ConfirmationService} from 'primeng/api';
+import { provideNgxMask } from 'ngx-mask';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes), provideClientHydration(withEventReplay()),
     provideHttpClient(withInterceptors([errorInterceptor]), withFetch()),
+    provideNgxMask(),
     MessageService,
     ConfirmationService,
     providePrimeNG({
