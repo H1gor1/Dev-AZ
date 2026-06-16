@@ -4,6 +4,5 @@ import { Component } from '@angular/core';
   selector: 'app-empresa',
   imports: [],
   templateUrl: './empresa.html',
-  styleUrl: './empresa.css',
 })
 export class Empresa {}

@@ -17,10 +17,20 @@ export class EmpresaService {
 
   constructor(private http: HttpClient) {}
 
-  listar(page: number = 0, size: number = 10): Observable<ApiResponse<EmpresaResponse[]>> {
-    const params = new HttpParams()
+  listar(
+    page: number = 0,
+    size: number = 10,
+    sortField?: string,
+    sortOrder?: number,
+  ): Observable<ApiResponse<EmpresaResponse[]>> {
+    let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
+
+    if (sortField) {
+      const dir = sortOrder === -1 ? 'desc' : 'asc';
+      params = params.set('sort', `${sortField},${dir}`);
+    }
 
     return this.http.get<ApiResponse<EmpresaResponse[]>>(this.apiUrl, { params });
   }

@@ -1,1 +1,62 @@
-<p>data-table works!</p>
+<div class="card">
+  <p-table
+    [columns]="cols"
+    [value]="items"
+    [lazy]="true"
+    [loading]="loading"
+    [paginator]="true"
+    [rows]="rows"
+    [totalRecords]="totalRecords"
+    editMode="cell"
+    [rowsPerPageOptions]="[5, 10, 25, 50]"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    (onLazyLoad)="onLazyLoad.emit($event)"
+    (onEditComplete)="$event.data && onEdit.emit({ rowData: $event.data, field: $event.field!, value: $event.data[$event.field!] })"
+  >
+    <ng-template #header let-columns>
+      <tr>
+        @for (col of columns; track col.field) {
+          <th [pSortableColumn]="col.field">
+            {{ col.header }}
+            <p-sortIcon [field]="col.field" />
+          </th>
+        }
+        @if (actions.length) {
+          <th>Ações</th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template #body let-rowData let-columns="columns">
+      <tr>
+        @for (col of columns; track col.field) {
+          <td [pEditableColumn]="col.editable ? rowData : null" [pEditableColumnField]="col.field">
+            @if (col.editable) {
+              <p-cellEditor>
+                <ng-template #input>
+                  <input pInputText type="text" [(ngModel)]="rowData[col.field]" fluid />
+                </ng-template>
+                <ng-template #output>
+                  {{ cellValue(col, rowData) }}
+                </ng-template>
+              </p-cellEditor>
+            } @else {
+              {{ cellValue(col, rowData) }}
+            }
+          </td>
+        }
+        @if (actions.length) {
+          <td class="text-center">
+            <p-menu #menu [model]="menuFor(rowData)" [popup]="true" appendTo="body" />
+            <p-button
+              icon="pi pi-ellipsis-v"
+              [text]="true"
+              [rounded]="true"
+              size="small"
+              (onClick)="menu.toggle($event)"
+            />
+          </td>
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

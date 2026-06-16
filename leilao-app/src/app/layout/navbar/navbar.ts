@@ -20,7 +20,7 @@ export class Navbar implements OnInit {
       {
         label: 'Empresas',
         icon: 'pi pi-building',
-        routerLink: '/empresa',
+        routerLink: '/empresas',
       },
       {
         label: 'Unidades',
