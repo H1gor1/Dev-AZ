@@ -10,6 +10,7 @@
     <include file="db/changelog/V1_create_unidade.xml"/>
     <include file="db/changelog/V1_create_lote.xml"/>
     <include file="db/changelog/V2_add_cascade_delete.xml"/>
+    <include file="db/changelog/V3_add_cascade_delete.xml"/>
 
     <include file="db/changelog/seeds/V2_seed_data.xml"/>
 </databaseChangeLog>

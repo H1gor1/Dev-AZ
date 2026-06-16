@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/unidade")
+@RequestMapping("/unidades")
 public class UnidadeService {
 
     private final UnidadeBO unidadeBO;

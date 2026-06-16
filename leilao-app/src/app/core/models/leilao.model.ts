@@ -1,4 +1,5 @@
 import { EmpresaResponse } from './empresa.model';
+import { LoteResponse } from './lote.model';
 
 export interface CreateLeilaoRequest {
   codigo: number;
@@ -19,6 +20,8 @@ export interface LeilaoResponse {
   descricao: string;
   vendedor: EmpresaResponse;
   inicioPrevisto: string;
+  total: number;
+  lotes?: LoteResponse[];
   createdAt: string;
   updatedAt: string;
 }

@@ -3,6 +3,9 @@ package com.higotlino.leilao.entity;
 import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -34,7 +37,11 @@ public class Leilao {
     private LocalDateTime inicioPrevisto;
 
     @OneToMany(mappedBy = "leilao", fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Lote> lotes = new ArrayList<>();
+
+    @Formula("(SELECT COALESCE(SUM(l2.quantidade * l2.valor_inicial), 0) FROM lote l2 WHERE l2.leilao_id = id)")
+    private Double total;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

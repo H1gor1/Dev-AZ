@@ -1,6 +1,7 @@
 package com.higotlino.leilao.business;
 
 import com.higotlino.leilao.entity.Unidade;
+import com.higotlino.leilao.exception.BusinessRuleException;
 import com.higotlino.leilao.exception.ResourceNotFoundException;
 import com.higotlino.leilao.repository.UnidadeRepository;
 import com.higotlino.leilao.specification.UnidadeSpecification;
@@ -44,9 +45,12 @@ public class UnidadeBO {
 
     @Transactional
     public void delete(Long id) {
-        unidadeRepository.findById(id).orElseThrow(
+        Unidade unidade = unidadeRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Unidade não encontrada")
         );
-        unidadeRepository.deleteById(id);
+        if (!unidade.getLotes().isEmpty()) {
+            throw new BusinessRuleException("Não é possível excluir a unidade pois há lotes vinculados a ela");
+        }
+        unidadeRepository.delete(unidade);
     }
 }

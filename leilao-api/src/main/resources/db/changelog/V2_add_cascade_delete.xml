@@ -23,4 +23,24 @@
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"/>
     </changeSet>
+
+    <changeSet id="160620261601" author="higor">
+        <dropForeignKeyConstraint baseTableName="lote" constraintName="lote_leilao_fk"/>
+        <addForeignKeyConstraint baseTableName="lote"
+                                 baseColumnNames="leilao_id"
+                                 constraintName="lote_leilao_fk"
+                                 referencedTableName="leilao"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="160620261602" author="higor">
+        <dropForeignKeyConstraint baseTableName="leilao" constraintName="leilao_vendedor_fk"/>
+        <addForeignKeyConstraint baseTableName="leilao"
+                                 baseColumnNames="vendedor"
+                                 constraintName="leilao_vendedor_fk"
+                                 referencedTableName="empresa"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
 </databaseChangeLog>

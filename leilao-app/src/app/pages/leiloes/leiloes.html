@@ -1,1 +1,16 @@
-<p>leiloes works!</p>
+<div class="p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-xl font-semibold">Leilões</h1>
+    <p-button label="Novo" icon="pi pi-plus" routerLink="/leilao" />
+  </div>
+
+  <app-data-table
+    [cols]="cols"
+    [items]="items()"
+    [loading]="loading()"
+    [rows]="10"
+    [totalRecords]="totalRecords()"
+    [actions]="actions"
+    (onLazyLoad)="carregar($event)"
+  />
+</div>

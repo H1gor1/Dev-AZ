@@ -25,12 +25,12 @@ export class Navbar implements OnInit {
       {
         label: 'Unidades',
         icon: 'pi pi-box',
-        routerLink: '/unidade',
+        routerLink: '/unidades',
       },
       {
         label: 'Leilões',
         icon: 'pi pi-tag',
-        routerLink: '/leilao',
+        routerLink: '/leiloes',
       },
     ];
   }

@@ -13,7 +13,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class UnidadeService {
-  private readonly apiUrl = environment.apiUrl + '/unidade';
+  private readonly apiUrl = environment.apiUrl + '/unidades';
 
   constructor(private http: HttpClient) {}
 
