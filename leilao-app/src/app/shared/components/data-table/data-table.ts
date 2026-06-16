@@ -9,6 +9,7 @@ export interface Column {
   field: string;
   header: string;
   editable?: boolean;
+  maxLength?: number;
   format?: (value: any) => string;
 }
 

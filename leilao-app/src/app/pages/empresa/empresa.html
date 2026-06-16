@@ -11,7 +11,7 @@
         @if (form.get('cnpj')?.touched && form.get('cnpj')?.invalid) {
           <small class="text-red-500">
             @if (form.get('cnpj')?.errors?.['required']) { CNPJ obrigatório. }
-            @else if (form.get('cnpj')?.errors?.['pattern']) { 14 dígitos. }
+            @else if (form.get('cnpj')?.errors?.['cnpj']) { CNPJ inválido. }
           </small>
         }
       </div>
@@ -19,8 +19,11 @@
       <div class="flex flex-col gap-1">
         <label for="razaoSocial">Razão Social *</label>
         <input pInputText id="razaoSocial" formControlName="razaoSocial" />
-        @if (form.get('razaoSocial')?.touched && form.get('razaoSocial')?.hasError('required')) {
-          <small class="text-red-500">Obrigatório.</small>
+        @if (form.get('razaoSocial')?.touched && form.get('razaoSocial')?.invalid) {
+          <small class="text-red-500">
+            @if (form.get('razaoSocial')?.errors?.['required']) { Obrigatório. }
+            @else if (form.get('razaoSocial')?.errors?.['maxlength']) { Máximo 64 caracteres. }
+          </small>
         }
       </div>
 
@@ -38,13 +41,19 @@
       <div class="flex flex-col gap-1">
         <label for="telefone">Telefone</label>
         <input pInputText id="telefone" formControlName="telefone" mask="(00) 00000-0000||(00) 0000-0000" [dropSpecialCharacters]="true" />
+        @if (form.get('telefone')?.touched && form.get('telefone')?.hasError('maxlength')) {
+          <small class="text-red-500">Máximo 32 caracteres.</small>
+        }
       </div>
 
       <div class="flex flex-col gap-1">
         <label for="usuario">Usuário *</label>
         <input pInputText id="usuario" formControlName="usuario" />
-        @if (form.get('usuario')?.touched && form.get('usuario')?.hasError('required')) {
-          <small class="text-red-500">Obrigatório.</small>
+        @if (form.get('usuario')?.touched && form.get('usuario')?.invalid) {
+          <small class="text-red-500">
+            @if (form.get('usuario')?.errors?.['required']) { Obrigatório. }
+            @else if (form.get('usuario')?.errors?.['maxlength']) { Máximo 20 caracteres. }
+          </small>
         }
       </div>
 
@@ -64,11 +73,17 @@
       <div class="flex flex-col gap-1">
         <label for="cep">CEP</label>
         <input pInputText id="cep" formControlName="cep" mask="00000-000" [dropSpecialCharacters]="true" />
+        @if (form.get('cep')?.touched && form.get('cep')?.hasError('maxlength')) {
+          <small class="text-red-500">Máximo 8 caracteres.</small>
+        }
       </div>
 
       <div class="col-span-2 flex flex-col gap-1">
         <label for="logradouro">Logradouro</label>
         <input pInputText id="logradouro" formControlName="logradouro" />
+        @if (form.get('logradouro')?.touched && form.get('logradouro')?.hasError('maxlength')) {
+          <small class="text-red-500">Máximo 64 caracteres.</small>
+        }
       </div>
 
       <div class="flex flex-col gap-1">
@@ -79,21 +94,33 @@
       <div class="flex flex-col gap-1">
         <label for="complemento">Complemento</label>
         <input pInputText id="complemento" formControlName="complemento" />
+        @if (form.get('complemento')?.touched && form.get('complemento')?.hasError('maxlength')) {
+          <small class="text-red-500">Máximo 64 caracteres.</small>
+        }
       </div>
 
       <div class="flex flex-col gap-1">
         <label for="bairro">Bairro</label>
         <input pInputText id="bairro" formControlName="bairro" />
+        @if (form.get('bairro')?.touched && form.get('bairro')?.hasError('maxlength')) {
+          <small class="text-red-500">Máximo 64 caracteres.</small>
+        }
       </div>
 
       <div class="flex flex-col gap-1">
         <label for="municipio">Município</label>
         <input pInputText id="municipio" formControlName="municipio" />
+        @if (form.get('municipio')?.touched && form.get('municipio')?.hasError('maxlength')) {
+          <small class="text-red-500">Máximo 64 caracteres.</small>
+        }
       </div>
 
       <div class="flex flex-col gap-1">
         <label for="site">Site</label>
         <input pInputText id="site" formControlName="site" />
+        @if (form.get('site')?.touched && form.get('site')?.hasError('maxlength')) {
+          <small class="text-red-500">Máximo 1000 caracteres.</small>
+        }
       </div>
     </div>
 

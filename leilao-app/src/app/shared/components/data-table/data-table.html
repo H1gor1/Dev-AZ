@@ -33,7 +33,7 @@
             @if (col.editable) {
               <p-cellEditor>
                 <ng-template #input>
-                  <input pInputText type="text" [(ngModel)]="rowData[col.field]" fluid />
+                  <input pInputText type="text" [(ngModel)]="rowData[col.field]" [attr.maxlength]="col.maxLength ?? null" fluid />
                 </ng-template>
                 <ng-template #output>
                   {{ cellValue(col, rowData) }}

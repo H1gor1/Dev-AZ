@@ -6,7 +6,7 @@
     <p-dialog header="Nova Unidade" [modal]="true" [(visible)]="dialogVisible" [style]="{ width: '25rem' }">
       <div class="flex items-center gap-4 mb-4">
         <label for="nome" class="font-semibold w-24">Nome</label>
-        <input pInputText id="nome" class="flex-auto" [(ngModel)]="novoNome" autocomplete="off" />
+        <input pInputText id="nome" class="flex-auto" [(ngModel)]="novoNome" maxlength="128" autocomplete="off" />
       </div>
       <div class="flex justify-end gap-2">
         <p-button label="Cancelar" severity="secondary" (click)="dialogVisible = false" />

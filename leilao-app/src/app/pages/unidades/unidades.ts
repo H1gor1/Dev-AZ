@@ -28,7 +28,7 @@ export class Unidades {
   novoNome = '';
 
   cols: Column[] = [
-    {field: 'nome', header: "Nome", editable: true},
+    {field: 'nome', header: "Nome", editable: true, maxLength: 128},
     {field: 'createdAt', header: "Data de criação"},
     {field: 'updatedAt', header: "Data de atualização"},
   ]
@@ -43,7 +43,10 @@ export class Unidades {
   }
 
   salvar(): void {
-    if (!this.novoNome.trim()) return;
+    if (!this.novoNome.trim()) {
+      this.ms.add({ severity: 'warn', summary: 'Aviso', detail: 'Nome não pode estar vazio' });
+      return;
+    }
 
     this.service.criar({ nome: this.novoNome.trim() }).subscribe({
       next: () => {
@@ -70,9 +73,13 @@ export class Unidades {
   }
 
   onUpdateEvent(event: CellEditEvent<UnidadeResponse>){
-    const request: UpdateUnidadeRequest = {
-      nome: event.rowData.nome
+    const nome = event.rowData.nome?.trim() ?? '';
+    if (!nome) {
+      this.ms.add({ severity: 'warn', summary: 'Aviso', detail: 'Nome não pode estar vazio' });
+      this.carregar({ first: 0, rows: 10 });
+      return;
     }
+    const request: UpdateUnidadeRequest = { nome }
     this.service
       .atualizar(event.rowData.id, request)
       .subscribe({

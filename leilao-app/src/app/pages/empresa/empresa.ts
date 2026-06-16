@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgxMaskDirective } from 'ngx-mask';
 import { EmpresaService } from '../../core/services/empresa.service';
+import {CnpjValidator} from '../../shared/validators/cnpj.validator';
 
 @Component({
   selector: 'app-empresa',
@@ -24,19 +25,19 @@ export class Empresa {
 
   form = this.fb.group({
     id: [null as number | null],
-    razaoSocial: ['', Validators.required],
-    cnpj: ['', [Validators.required, Validators.pattern(/^\d{14}$/)]],
+    razaoSocial: ['', [Validators.required, Validators.maxLength(64)]],
+    cnpj: ['', [Validators.required, CnpjValidator.validate]],
     email: ['', [Validators.required, Validators.email]],
-    usuario: ['', Validators.required],
+    usuario: ['', [Validators.required, Validators.maxLength(20)]],
     password: ['', Validators.required],
-    telefone: [''],
-    logradouro: [''],
+    telefone: ['', Validators.maxLength(32)],
+    logradouro: ['', Validators.maxLength(64)],
     numero: [''],
-    complemento: [''],
-    bairro: [''],
-    municipio: [''],
-    cep: [''],
-    site: [''],
+    complemento: ['', Validators.maxLength(64)],
+    bairro: ['', Validators.maxLength(64)],
+    municipio: ['', Validators.maxLength(64)],
+    cep: ['', Validators.maxLength(8)],
+    site: ['', Validators.maxLength(1000)],
   });
 
   constructor() {
