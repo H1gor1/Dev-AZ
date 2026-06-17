@@ -1,5 +1,71 @@
 # AZ Avaliação
 
+## Como subir o sistema
+
+### Pré-requisitos
+
+- [Docker](https://docs.docker.com/engine/install/) e [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Passo a passo
+
+1. **Clone o repositório** e acesse a pasta do projeto:
+
+   ```bash
+   git clone <url-do-repositorio>
+   cd Dev
+   ```
+
+2. **Configure as variáveis de ambiente**: copie o arquivo de exemplo e ajuste se necessário:
+
+   ```bash
+   cp example.env .env
+   ```
+   
+   ```
+   DB_DATABASE=az_avaliacao
+   DB_USERNAME=postgres
+   DB_PASSWORD=postgres
+   DB_URL=jdbc:postgresql://db:5432/az_avaliacao
+   ```
+
+3. **Suba os containers** com Docker Compose:
+
+   ```bash
+   docker compose up --build
+   ```
+
+   Na primeira execução o build pode demorar alguns minutos (download de imagens e dependências Maven/npm).
+
+4. **Acesse o sistema:**
+
+   | Serviço       | URL                          |
+   |---------------|-----------------------------|
+   | Frontend (Angular) | http://localhost:4200    |
+   | API (Spring Boot)  | http://localhost:8080    |
+   | Banco (PostgreSQL) | localhost:5432           |
+
+5. **Para parar os containers:**
+
+   ```bash
+   docker compose down
+   ```
+
+   Para remover também os volumes (limpa os dados do banco):
+
+   ```bash
+   docker compose down -v
+   ```
+
+### Estrutura dos serviços
+
+| Serviço | Diretório      | Tecnologia            | Porta |
+|---------|---------------|-----------------------|-------|
+| `db`    | —             | PostgreSQL 18 Alpine  | 5432  |
+| `api`   | `leilao-api/` | Spring Boot 2.7 / Java 11 | 8080  |
+| `app`   | `leilao-app/` | Angular 21            | 4200  |
+
+Os fontes da API (`leilao-api/src`) e do frontend (`leilao-app/src`) são montados como volumes nos containers, portanto alterações no código são refletidas com hot reload automaticamente.
+
 Projeto para avaliação e seleção de candidatos a vaga de programador full stack da empresa AZ Tecnologia em Gestão. 
 Nesta avaliação você deverá criar uma aplicação completa utilizando os frameworks e banco de dados abaixo:
 
