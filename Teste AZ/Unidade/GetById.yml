@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8080/unidade/:id
+  url: http://localhost:8080/unidades/:id
   params:
     - name: id
       value: "1"
