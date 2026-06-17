@@ -11,11 +11,11 @@
 1. **Clone o repositório** e acesse a pasta do projeto:
 
    ```bash
-   git clone <url-do-repositorio>
-   cd Dev
+   git clone https://github.com/H1gor1/Dev-AZ
+   cd Dev-AZ
    ```
 
-2. **Configure as variáveis de ambiente**: copie o arquivo de exemplo e ajuste se necessário:
+2. **Configure as variáveis de ambiente**: copie o arquivo de exemplo e ajuste as variáveis se necessário:
 
    ```bash
    cp example.env .env
