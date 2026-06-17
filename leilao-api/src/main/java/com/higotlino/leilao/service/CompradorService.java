@@ -13,6 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,7 +59,12 @@ public class CompradorService {
     public ResponseEntity<ApiResponse<CompradorResponse>> create(
             @RequestBody @Validated CreateCompradorRequest request) {
         Comprador saved = compradorBO.create(request.getLeilaoId(), request.getEmpresaId());
-        return ResponseEntity.ok(ApiResponse.ok("Comprador vinculado",
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/leilao/{leilaoId}")
+                .buildAndExpand(saved.getLeilao().getId())
+                .toUri();
+        return ResponseEntity.created(location).body(ApiResponse.ok("Comprador vinculado",
                 mapper.toResponse(saved)));
     }
 

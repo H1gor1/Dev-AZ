@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -52,7 +55,12 @@ public class EmpresaService {
     public ResponseEntity<ApiResponse<EmpresaResponse>> create(@RequestBody @Validated EmpresaRequest request){
         Empresa empresa = mapper.toEntity(request);
         Empresa saved = empresaBO.create(empresa);
-        return ResponseEntity.ok(ApiResponse.ok("Empresa criada", mapper.toResponse(saved)));
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(saved.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(ApiResponse.ok("Empresa criada", mapper.toResponse(saved)));
     }
 
     @PutMapping("/{id}")

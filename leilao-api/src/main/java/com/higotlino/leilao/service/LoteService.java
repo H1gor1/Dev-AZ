@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -52,7 +55,12 @@ public class LoteService {
             @RequestBody @Validated CreateLoteRequest request) {
         Lote lote = mapper.toEntity(request);
         Lote saved = loteBO.create(lote, request.getUnidadeId(), request.getLeilaoId());
-        return ResponseEntity.ok(ApiResponse.ok("Lote criado",
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(saved.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(ApiResponse.ok("Lote criado",
                 mapper.toResponse(saved)));
     }
 

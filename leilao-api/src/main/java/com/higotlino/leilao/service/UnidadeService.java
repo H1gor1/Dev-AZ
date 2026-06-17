@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -50,7 +53,12 @@ public class UnidadeService {
             @RequestBody @Validated CreateUnidadeRequest request) {
         Unidade unidade = mapper.toEntity(request);
         Unidade saved = unidadeBO.create(unidade);
-        return ResponseEntity.ok(ApiResponse.ok("Unidade criada",
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(saved.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(ApiResponse.ok("Unidade criada",
                 mapper.toResponse(saved)));
     }
 

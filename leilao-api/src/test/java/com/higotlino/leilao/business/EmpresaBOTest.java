@@ -11,14 +11,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@ActiveProfiles("test")
 class EmpresaBOTest {
 
     @Mock
@@ -106,9 +104,9 @@ class EmpresaBOTest {
     @Test
     @DisplayName("UPDATE Deve atualizar empresa com sucesso.")
     void updateShouldSucceed() {
-        when(empresaRepository.existsEmpresaByCnpj("12345678000199")).thenReturn(false);
-        when(empresaRepository.existsEmpresaByUsuario("teste")).thenReturn(false);
-
+        empresa.setId(1L);
+        when(empresaRepository.existsEmpresaByCnpjAndIdNot("12345678000199", 1L)).thenReturn(false);
+        when(empresaRepository.existsEmpresaByUsuarioAndIdNot("teste", 1L)).thenReturn(false);
         when(empresaRepository.save(any(Empresa.class))).thenAnswer(inv -> inv.getArgument(0));
 
         Empresa saved = empresaBO.update(empresa);
@@ -120,29 +118,31 @@ class EmpresaBOTest {
     @Test
     @DisplayName("UPDATE Deve lancar DataIntegrityViolationException quando CNPJ ja existe")
     void updateShouldThrowWhenCnpjExists() {
-        when(empresaRepository.existsEmpresaByCnpj("12345678000199")).thenReturn(true);
+        empresa.setId(1L);
+        when(empresaRepository.existsEmpresaByCnpjAndIdNot("12345678000199", 1L)).thenReturn(true);
+
         DataIntegrityViolationException ex = assertThrows(
                 DataIntegrityViolationException.class,
                 () -> empresaBO.update(empresa)
         );
 
         assertEquals("Empresa ja cadastrada com este CNPJ", ex.getMessage());
-
         verify(empresaRepository, never()).save(any());
     }
 
     @Test
     @DisplayName("UPDATE Deve lancar DataIntegrityViolationException quando usuario ja existe")
     void updateShouldThrowWhenUserExists() {
-        when(empresaRepository.existsEmpresaByCnpj("12345678000199")).thenReturn(false);
-        when(empresaRepository.existsEmpresaByUsuario("teste")).thenReturn(true);
+        empresa.setId(1L);
+        when(empresaRepository.existsEmpresaByCnpjAndIdNot("12345678000199", 1L)).thenReturn(false);
+        when(empresaRepository.existsEmpresaByUsuarioAndIdNot("teste", 1L)).thenReturn(true);
+
         DataIntegrityViolationException ex = assertThrows(
                 DataIntegrityViolationException.class,
                 () -> empresaBO.update(empresa)
         );
 
         assertEquals("Empresa ja cadastrada com este usuario", ex.getMessage());
-
         verify(empresaRepository, never()).save(any());
     }
 

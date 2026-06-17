@@ -46,7 +46,7 @@ class UnidadeControllerTest {
     }
 
     @Test
-    @DisplayName("POST /unidades com nome valido deve retornar 200 e criar unidade")
+    @DisplayName("POST /unidades com nome valido deve retornar 201 e criar unidade")
     void createWithValidNomeShouldReturn200() throws Exception {
         Unidade entity = new Unidade();
         entity.setId(1L);
@@ -65,7 +65,7 @@ class UnidadeControllerTest {
         mockMvc.perform(post("/unidades")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value("Unidade criada"))
                 .andExpect(jsonPath("$.data.nome").value("Nova unidade"));
 

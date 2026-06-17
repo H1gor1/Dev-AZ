@@ -13,6 +13,20 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
 
+  app:
+    build:
+      context: ./leilao-app
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./leilao-app/src:/app/src
+      - ./leilao-app/angular.json:/app/angular.json
+      - ./leilao-app/tsconfig.json:/app/tsconfig.json
+      - ./leilao-app/tsconfig.app.json:/app/tsconfig.app.json
+    environment:
+      - NODE_ENV=development
+
   api:
     build:
       context: ./leilao-api
