@@ -17,7 +17,7 @@ export class UnidadeService {
 
   constructor(private http: HttpClient) {}
 
-  listar(page: number = 0, size: number = 10, sortField?: string, sortOrder?: number,): Observable<ApiResponse<UnidadeResponse[]>> {
+  listar(page: number = 0, size: number = 10, sortField?: string, sortOrder?: number, nome?: string): Observable<ApiResponse<UnidadeResponse[]>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
@@ -25,6 +25,10 @@ export class UnidadeService {
     if (sortField) {
       const dir = sortOrder === -1 ? 'desc' : 'asc';
       params = params.set('sort', `${sortField},${dir}`);
+    }
+
+    if (nome) {
+      params = params.set('nome', nome);
     }
 
     return this.http.get<ApiResponse<UnidadeResponse[]>>(this.apiUrl, { params });

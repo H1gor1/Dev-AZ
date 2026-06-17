@@ -22,6 +22,7 @@ export class EmpresaService {
     size: number = 10,
     sortField?: string,
     sortOrder?: number,
+    razaoSocial?: string,
   ): Observable<ApiResponse<EmpresaResponse[]>> {
     let params = new HttpParams()
       .set('page', page.toString())
@@ -30,6 +31,10 @@ export class EmpresaService {
     if (sortField) {
       const dir = sortOrder === -1 ? 'desc' : 'asc';
       params = params.set('sort', `${sortField},${dir}`);
+    }
+
+    if (razaoSocial) {
+      params = params.set('razaoSocial', razaoSocial);
     }
 
     return this.http.get<ApiResponse<EmpresaResponse[]>>(this.apiUrl, { params });

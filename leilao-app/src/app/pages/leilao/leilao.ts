@@ -6,7 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 import { TableModule } from 'primeng/table';
-import { forkJoin } from 'rxjs';
+import { debounceTime, forkJoin, Subject } from 'rxjs';
 import { LeilaoService } from '../../core/services/leilao.service';
 import { LoteService } from '../../core/services/lote.service';
 import { EmpresaService } from '../../core/services/empresa.service';
@@ -35,6 +35,11 @@ export class Leilao {
 
   empresas = signal<EmpresaResponse[]>([]);
   unidades = signal<UnidadeResponse[]>([]);
+  loadingEmpresas = signal(false);
+  loadingUnidades = signal(false);
+
+  private searchEmpresa = new Subject<string>();
+  private searchUnidade = new Subject<string>();
 
   form = this.fb.group({
     codigo: [0, Validators.required],
@@ -50,8 +55,24 @@ export class Leilao {
   }
 
   constructor() {
-    this.carregarEmpresas();
-    this.carregarUnidades();
+    this.searchEmpresa.pipe(debounceTime(300)).subscribe(term => {
+      this.loadingEmpresas.set(true);
+      this.empresaService.listar(0, 20, undefined, undefined, term || undefined).subscribe(res => {
+        this.empresas.set(res.data);
+        this.loadingEmpresas.set(false);
+      });
+    });
+
+    this.searchUnidade.pipe(debounceTime(300)).subscribe(term => {
+      this.loadingUnidades.set(true);
+      this.unidadeService.listar(0, 20, undefined, undefined, term || undefined).subscribe(res => {
+        this.unidades.set(res.data);
+        this.loadingUnidades.set(false);
+      });
+    });
+
+    this.searchEmpresa.next('');
+    this.searchUnidade.next('');
 
     const id = this.route.snapshot.params['id'];
     if (id) {
@@ -61,12 +82,12 @@ export class Leilao {
     }
   }
 
-  private carregarEmpresas(): void {
-    this.empresaService.listar(0, 999).subscribe((res) => this.empresas.set(res.data));
+  onFilterEmpresa(event: { filter: string }): void {
+    this.searchEmpresa.next(event.filter);
   }
 
-  private carregarUnidades(): void {
-    this.unidadeService.listar(0, 999).subscribe((res) => this.unidades.set(res.data));
+  onFilterUnidade(event: { filter: string }): void {
+    this.searchUnidade.next(event.filter);
   }
 
   private carregarLeilao(id: number): void {
@@ -92,6 +113,17 @@ export class Leilao {
           unidadeId: lo.unidade.id,
         });
       });
+      this.loadUnidadeForLotes(lotes.data);
+    });
+  }
+
+  private loadUnidadeForLotes(lotes: { unidade: { id: number; nome: string } }[]): void {
+    const existing = new Set(this.unidades().map(u => u.id));
+    lotes.forEach(lo => {
+      if (!existing.has(lo.unidade.id)) {
+        this.unidades.update(list => [...list, { id: lo.unidade.id, nome: lo.unidade.nome } as UnidadeResponse]);
+        existing.add(lo.unidade.id);
+      }
     });
   }
 

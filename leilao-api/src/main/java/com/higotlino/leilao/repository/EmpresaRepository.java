@@ -6,5 +6,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface EmpresaRepository extends JpaRepository<Empresa, Long>, JpaSpecificationExecutor<Empresa> {
     boolean existsEmpresaByCnpj(String cnpj);
+    boolean existsEmpresaByCnpjAndIdNot(String cnpj, Long id);
     boolean existsEmpresaByUsuario(String usuario);
+    boolean existsEmpresaByUsuarioAndIdNot(String usuario, Long id);
 }

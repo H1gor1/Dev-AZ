@@ -51,10 +51,10 @@ public class EmpresaBO {
 
     @Transactional
     public Empresa update(Empresa empresa) {
-        if (empresaRepository.existsEmpresaByCnpj(empresa.getCnpj()))
+        if (empresaRepository.existsEmpresaByCnpjAndIdNot(empresa.getCnpj(), empresa.getId()))
             throw new DataIntegrityViolationException("Empresa ja cadastrada com este CNPJ");
 
-        if (empresaRepository.existsEmpresaByUsuario(empresa.getUsuario()))
+        if (empresaRepository.existsEmpresaByUsuarioAndIdNot(empresa.getUsuario(), empresa.getId()))
             throw new DataIntegrityViolationException("Empresa ja cadastrada com este usuario");
 
         return empresaRepository.save(empresa);
